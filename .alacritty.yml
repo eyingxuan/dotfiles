@@ -638,6 +638,7 @@ key_bindings:
   #- { key: W,      mods: Command,         action: Quit             }
   #- { key: F,      mods: Command|Control, action: ToggleFullscreen }
   - { key: X,      mods: Alt, chars: "\x1bx"   }
+  - { key: Slash,      mods: Alt, chars: "\x1b\x2f"   }
 
   #- { key: Paste,                    action: Paste                            }
   #- { key: Copy,                     action: Copy                             }

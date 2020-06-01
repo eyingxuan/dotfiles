@@ -71,6 +71,7 @@ HIST_STAMPS="mm/dd/yyyy"
 export NVM_LAZY_LOAD="true"
 
 plugins=(
+  zsh-syntax-highlighting
   zsh-nvm
   git
   zsh-autosuggestions
@@ -113,5 +114,4 @@ eval "$(pyenv init -)"
 
 # opam configuration
 test -r /Users/yingxuan/.opam/opam-init/init.zsh && . /Users/yingxuan/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
 

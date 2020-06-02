@@ -2,6 +2,10 @@ if [ -f /etc/profile ]; then
     PATH=""
     source /etc/profile
 fi
+
+
+
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -79,6 +83,12 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# emacs autosuggestions color
+if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
+  export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
+fi
+
 
 # User configuration
 

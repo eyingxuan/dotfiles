@@ -84,11 +84,6 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# emacs autosuggestions color
-if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
-  export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
-fi
-
 
 # User configuration
 

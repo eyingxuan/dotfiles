@@ -3,9 +3,6 @@ if [ -f /etc/profile ]; then
     source /etc/profile
 fi
 
-
-
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -113,6 +110,14 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# type alias for exa 
+if type exa > /dev/null; then
+  alias ls='exa'
+  alias ll='exa --git --links -lbFh'
+  alias lt='exa -T --level=2'
+fi
+
 
 export PATH="~/.pyenv:$PATH"
 eval "$(pyenv init -)"

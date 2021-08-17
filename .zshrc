@@ -76,6 +76,7 @@ plugins=(
   zsh-nvm
   git
   zsh-autosuggestions
+  fasd
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -118,6 +119,11 @@ if type exa > /dev/null; then
   alias lt='exa -T --level=2'
 fi
 
+# type alias for bat
+if type bat > /dev/null; then
+  alias cat='bat'
+fi
+
 
 export PATH="~/.pyenv:$PATH"
 eval "$(pyenv init -)"
@@ -125,3 +131,7 @@ eval "$(pyenv init -)"
 # opam configuration
 test -r /Users/yingxuan/.opam/opam-init/init.zsh && . /Users/yingxuan/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
+
+export PATH="$HOME/.local/bin:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+export LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib"

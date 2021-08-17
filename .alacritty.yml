@@ -677,6 +677,9 @@ key_bindings:
   #- { key: F,      mods: Command|Control, action: ToggleFullscreen }
   - { key: X,      mods: Alt, chars: "\x1bx"   }
   - { key: Slash,      mods: Alt, chars: "\x1b\x2f"   }
+  - { key: Comma,      mods: Alt, chars: "\x1b,"   }
+  - { key: Left,     mods: Alt,     chars: "\x1bb" } 
+  - { key: Right,    mods: Alt,     chars: "\x1bf" }
   - { key: N, mods: Command, action: SpawnNewInstance }
 
   #- { key: Paste,                    action: Paste                            }

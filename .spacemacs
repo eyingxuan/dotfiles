@@ -44,8 +44,8 @@ This function should only modify configuration layer settings."
           t org-start-notification-daemon-on-startup
           t org-enable-roam-support t org-enable-roam-protocol
           t org-enable-roam-server t)
-     (shell (:variables shell-default-shell 'multi-term
-                        shell-default-position 'bottom))
+     (shell :variables shell-default-shell 'multi-term
+                        shell-default-position 'bottom)
      semantic
      spell-checking
      syntax-checking

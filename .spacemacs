@@ -417,8 +417,10 @@ It should only modify the values of Spacemacs settings."
    ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
+   ;; https://github.com/org-roam/org-roam/pull/1943 roam workaround
    dotspacemacs-line-numbers
-   'relative
+    '(:relative t
+	     :disabled-for-modes org-mode)
    ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
    dotspacemacs-folding-method
@@ -584,6 +586,20 @@ before packages are loaded."
                '("\\.tsx?\\'" . typescript-mode))
   (setq ivy-initial-inputs-alist nil)
   ;; ls aliases to exa
+
+  ;; roam workaround https://github.com/org-roam/org-roam/pull/1943
+  (fset 'evil-redirect-digit-argument 'ignore)
+  (evil-define-key 'motion 'evil-org-mode (kbd "0") 'evil-org-beginning-of-line)
+  (global-page-break-lines-mode -1)
+
+  (defun display-line-numbers-customize ()
+	  (setq display-line-numbers 'relative))
+  (add-hook 'org-mode-hook 'display-line-numbers-customize)
+  (advice-add 'org-roam-buffer-persistent-redisplay :before
+		(lambda () (remove-hook 'org-mode-hook 'display-line-numbers-customize)))
+  (advice-add 'org-roam-buffer-persistent-redisplay :after
+		(lambda () (add-hook 'org-mode-hook 'display-line-numbers-customize)))
+
 
   ;; popwin config
   (with-eval-after-load 'popwin

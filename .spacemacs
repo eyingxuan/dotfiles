@@ -17,13 +17,9 @@ This function should only modify configuration layer settings."
    ;; listed in `dotspacemacs-configuration-layers'. `nil' disable the lazy
    ;; installation feature and you have to explicitly list a layer in the
    ;; variable `dotspacemacs-configuration-layers' to install it.
-   ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation
-   'unused
+   ;; (default 'unused) dotspacemacs-enable-lazy-installation 'unused
    ;; If non-nil then Spacemacs will ask for confirmation before installing
-   ;; a layer lazily. (default t)
-   dotspacemacs-ask-for-lazy-installation
-   t
+   ;; a layer lazily. (default t) dotspacemacs-ask-for-lazy-installation t
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path
@@ -48,7 +44,8 @@ This function should only modify configuration layer settings."
      multiple-cursors
      (org :variables org-enable-notifications
           t org-start-notification-daemon-on-startup
-          t org-enable-roam-support t)
+          t org-enable-roam-support t org-enable-org-journal-support
+          t)
      (shell :variables shell-default-shell'multi-term
             shell-default-position 'bottom)
      semantic
@@ -116,17 +113,13 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil) dotspacemacs-enable-emacs-pdumper nil
    ;; Name of executable file pointing to emacs 27+. This executable must be
    ;; in your PATH.
-   ;; (default "emacs")
-   dotspacemacs-emacs-pdumper-executable-file
-   "emacs"
+   ;; (default "emacs") dotspacemacs-emacs-pdumper-executable-file "emacs"
    ;; Name of the Spacemacs dump file. This is the file will be created by the
    ;; portable dumper in the cache directory under dumps sub-directory.
    ;; To load it when starting Emacs add the parameter `--dump-file'
    ;; when invoking Emacs 27.1 executable on the command line, for instance:
    ;;   ./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp
-   ;; (default (format "spacemacs-%s.pdmp" emacs-version))
-   dotspacemacs-emacs-dumper-dump-file
-   (format "spacemacs-%s.pdmp" emacs-version)
+   ;; (default (format "spacemacs-%s.pdmp" emacs-version)) dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
    ;; possible. Set it to nil if you have no way to use HTTPS in your
    ;; environment, otherwise it is strongly recommended to let it set to t.
@@ -241,7 +234,7 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes
-   '(spacemacs-dark spacemacs-light)
+   '(grandshell spacemacs-dark spacemacs-light)
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
    ;; first three are spaceline themes. `doom' is the doom-emacs mode-line.
@@ -419,8 +412,7 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    ;; https://github.com/org-roam/org-roam/pull/1943 roam workaround
    dotspacemacs-line-numbers
-    '(:relative t
-	     :disabled-for-modes org-mode)
+   '(:relative t :disabled-for-modes org-mode)
    ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
    dotspacemacs-folding-method
@@ -564,9 +556,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
                                    (selected-frame)))
                 (when (display-graphic-p frame)
                   (set-frame-parameter frame 'menu-bar-lines
-                                       1)))))
-  (setq org-roam-v2-ack t)
-  (setq org-roam-directory "~/Dropbox/org/brain"))
+                                       1))))))
 
 
 (defun dotspacemacs/user-load ()
@@ -589,18 +579,20 @@ before packages are loaded."
 
   ;; roam workaround https://github.com/org-roam/org-roam/pull/1943
   (fset 'evil-redirect-digit-argument 'ignore)
-  (evil-define-key 'motion 'evil-org-mode (kbd "0") 'evil-org-beginning-of-line)
+  (evil-define-key 'motion
+    'evil-org-mode
+    (kbd "0")
+    'evil-org-beginning-of-line)
   (global-page-break-lines-mode -1)
-
   (defun display-line-numbers-customize ()
-	  (setq display-line-numbers 'relative))
+    (setq display-line-numbers 'relative))
   (add-hook 'org-mode-hook 'display-line-numbers-customize)
-  (advice-add 'org-roam-buffer-persistent-redisplay :before
-		(lambda () (remove-hook 'org-mode-hook 'display-line-numbers-customize)))
-  (advice-add 'org-roam-buffer-persistent-redisplay :after
-		(lambda () (add-hook 'org-mode-hook 'display-line-numbers-customize)))
-
-
+  (advice-add 'org-roam-buffer-persistent-redisplay
+              :before (lambda ()
+                        (remove-hook 'org-mode-hook 'display-line-numbers-customize)))
+  (advice-add 'org-roam-buffer-persistent-redisplay
+              :after (lambda ()
+                       (add-hook 'org-mode-hook 'display-line-numbers-customize)))
   ;; popwin config
   (with-eval-after-load 'popwin
     (add-to-list 'popwin:special-display-config '("*Calendar*" :dedicated t
@@ -624,6 +616,15 @@ before packages are loaded."
   (setq deft-directory "~/Dropbox/org/brain")
   (with-eval-after-load 'org
     (setq org-directory "~/Dropbox/org/"))
+  ;; Set up org roam
+  (with-eval-after-load 'org-roam
+    (setq org-roam-v2-ack t)
+    (setq org-roam-directory "~/Dropbox/org/brain"))
+  ;; Set up org journal
+  (with-eval-after-load 'org-journal
+    (setq org-journal-dir "~/Dropbox/org/journal/")
+    (setq org-journal-date-format "%A, %d %B %Y")
+    (setq org-journal-enable-agenda-integration t))
   ;; Set up org agenda
   (with-eval-after-load 'org-agenda
     (setq org-agenda-window-setup 'current-window)
@@ -669,26 +670,22 @@ before packages are loaded."
                                               (org-agenda-files '("~/Dropbox/org/inbox.org"))))
                                        (tags-todo "@today"
                                                   ((org-agenda-overriding-header "Today")
-                                                   (org-agenda-files '("~/Dropbox/org/todo.org" "~/Dropbox/org/projects.org"
-                                                                       "~/Dropbox/org/habits.org"))))
+                                                   (org-agenda-files org-agenda-files)))
                                        (tags-todo "@progress"
                                                   ((org-agenda-overriding-header "In Progress")
-                                                   (org-agenda-files '("~/Dropbox/org/todo.org" "~/Dropbox/org/projects.org"
-                                                                       "~/Dropbox/org/habits.org"))))
+                                                   (org-agenda-files org-agenda-files)))
                                        (tags-todo "@blocked"
                                                   ((org-agenda-overriding-header "Blocked")
-                                                   (org-agenda-files '("~/Dropbox/org/todo.org" "~/Dropbox/org/projects.org"
-                                                                       "~/Dropbox/org/habits.org"))))
+                                                   (org-agenda-files org-agenda-files)))
                                        (tags-todo "@submit"
                                                   ((org-agenda-overriding-header "Submit")
-                                                   (org-agenda-files '("~/Dropbox/org/todo.org" "~/Dropbox/org/projects.org"
-                                                                       "~/Dropbox/org/habits.org"))))
+                                                   (org-agenda-files org-agenda-files)))
                                        (todo "TODO"
                                              ((org-agenda-overriding-header "Projects")
                                               (org-agenda-files '("~/Dropbox/org/projects.org"))))
                                        (todo "TODO"
                                              ((org-agenda-overriding-header "One-off Tasks")
-                                              (org-agenda-files '("~/Dropbox/org/todo.org"))
+                                              (org-agenda-files org-agenda-files)
                                               (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))
                                       nil))
     (add-to-list 'org-agenda-custom-commands `,ying/org-agenda-todo-view))
@@ -728,130 +725,20 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(evil-want-Y-yank-to-eol nil)
-   '(package-selected-packages '(dap-mode bui zonokai-emacs zenburn-theme
-                                          zen-and-art-theme yasnippet-snippets yapfify
-                                          xterm-color white-sand-theme wgrep web-mode
-                                          web-beautify vterm utop underwater-theme ujelly-theme
-                                          twilight-theme twilight-bright-theme twilight-anti-bright-theme
-                                          tuareg caml treemacs-magit toxi-theme toml-mode
-                                          tide typescript-mode terminal-here tao-theme
-                                          tangotango-theme tango-plus-theme tango-2-theme
-                                          tagedit sunny-day-theme sublime-themes subatomic256-theme
-                                          subatomic-theme stickyfunc-enhance srefactor
-                                          sphinx-doc spacegray-theme soothe-theme solarized-theme
-                                          soft-stone-theme soft-morning-theme soft-charcoal-theme
-                                          smyx-theme smex smeargle slim-mode shell-pop
-                                          seti-theme scss-mode sass-mode ron-mode rjsx-mode
-                                          reverse-theme reveal-in-osx-finder rebecca-theme
-                                          railscasts-theme racer rust-mode pytest pyenv-mode
-                                          pydoc py-isort purple-haze-theme pug-mode
-                                          proof-general professional-theme prettier-js
-                                          poetry planet-theme pippel pipenv pyvenv pip-requirements
-                                          phoenix-dark-pink-theme phoenix-dark-mono-theme
-                                          osx-trash osx-dictionary osx-clipboard orgit-forge
-                                          orgit organic-green-theme org-wild-notifier
-                                          org-roam-ui websocket org-roam org-rich-yank
-                                          org-projectile org-category-capture org-present
-                                          org-pomodoro org-mime org-gcal persist alert
-                                          log4e gntp org-download org-contrib org-cliplink
-                                          org omtose-phellack-theme oldlace-theme ocp-indent
-                                          occidental-theme ocamlformat obsidian-theme
-                                          npm-mode nose nodejs-repl noctilux-theme naquadah-theme
-                                          mustang-theme multi-term monokai-theme monochrome-theme
-                                          molokai-theme moe-theme modus-themes mmm-mode
-                                          minimal-theme merlin-iedit merlin-eldoc merlin-company
-                                          material-theme markdown-toc majapahit-theme
-                                          madhat2r-theme lush-theme lsp-ui lsp-treemacs
-                                          lsp-python-ms lsp-pyright lsp-origami origami
-                                          lsp-ivy lsp-haskell livid-mode skewer-mode
-                                          live-py-mode light-soap-theme launchctl kaolin-themes
-                                          k8s-mode yaml-mode json-reformat json-navigator
-                                          hierarchy js2-refactor multiple-cursors js2-mode
-                                          js-doc jbeans-theme jazz-theme ivy-yasnippet
-                                          ivy-xref ivy-rtags ivy-purpose ivy-hydra ivy-avy
-                                          ir-black-theme inkpot-theme importmagic epc
-                                          ctable concurrent impatient-mode simple-httpd
-                                          ibuffer-projectile htmlize hlint-refactor
-                                          hindent heroku-theme hemisu-theme hc-zenburn-theme
-                                          haskell-snippets haml-mode gruvbox-theme gruber-darker-theme
-                                          grandshell-theme gotham-theme google-c-style
-                                          gnuplot gitignore-templates git-timemachine
-                                          git-modes git-messenger git-link gh-md gendoxy
-                                          gandalf-theme fuzzy forge yaml magit ghub
-                                          closql emacsql-sqlite emacsql treepy magit-section
-                                          git-commit with-editor flyspell-correct-ivy
-                                          flyspell-correct flycheck-ycmd flycheck-rust
-                                          flycheck-rtags flycheck-pos-tip pos-tip flycheck-ocaml
-                                          merlin flycheck-haskell flatui-theme flatland-theme
-                                          farmhouse-theme eziam-theme exotica-theme
-                                          evil-org espresso-theme eshell-z eshell-prompt-extras
-                                          esh-help emmet-mode dune dracula-theme doom-themes
-                                          dockerfile-mode docker transient tablist json-mode
-                                          docker-tramp json-snatcher django-theme disaster
-                                          deft darktooth-theme darkokai-theme darkmine-theme
-                                          darkburn-theme dante lcr haskell-mode dakrone-theme
-                                          cython-mode cyberpunk-theme cpp-auto-include
-                                          counsel-projectile counsel-css counsel swiper
-                                          ivy company-ycmd ycmd request-deferred deferred
-                                          company-web web-completion-data company-rtags
-                                          rtags company-coq company-math math-symbol-lists
-                                          company-cabal company-c-headers company-anaconda
-                                          company color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized
-                                          cmm-mode clues-theme chocolate-theme autothemer
-                                          cherry-blossom-theme ccls lsp-mode cargo markdown-mode
-                                          calfw-org calfw busybee-theme bubbleberry-theme
-                                          blacken birds-of-paradise-plus-theme badwolf-theme
-                                          auto-yasnippet yasnippet auto-dictionary attrap
-                                          apropospriate-theme anti-zenburn-theme anaconda-mode
-                                          pythonic ample-zen-theme ample-theme alect-themes
-                                          afternoon-theme ac-ispell auto-complete ws-butler
-                                          writeroom-mode visual-fill-column winum volatile-highlights
-                                          vi-tilde-fringe uuidgen undo-tree treemacs-projectile
-                                          treemacs-persp treemacs-icons-dired treemacs-evil
-                                          treemacs cfrs pfuture posframe toc-org symon
-                                          symbol-overlay string-inflection string-edit
-                                          spaceline-all-the-icons memoize all-the-icons
-                                          spaceline powerline restart-emacs request
-                                          rainbow-delimiters quickrun popwin persp-mode
-                                          password-generator paradox spinner overseer
-                                          org-superstar open-junk-file nameless multi-line
-                                          shut-up macrostep lorem-ipsum link-hint inspector
-                                          info+ indent-guide hungry-delete hl-todo highlight-parentheses
-                                          highlight-numbers parent-mode highlight-indentation
-                                          helm-xref helm-themes helm-swoop helm-purpose
-                                          window-purpose imenu-list helm-projectile
-                                          helm-org helm-mode-manager helm-make helm-ls-git
-                                          helm-flx helm-descbinds helm-ag google-translate
-                                          golden-ratio flycheck-package package-lint
-                                          flycheck pkg-info epl flycheck-elsa flx-ido
-                                          flx fancy-battery eyebrowse expand-region
-                                          evil-visualstar evil-visual-mark-mode evil-unimpaired
-                                          f evil-tutor evil-textobj-line evil-surround
-                                          evil-numbers evil-nerd-commenter evil-mc evil-matchit
-                                          evil-lisp-state evil-lion evil-indent-plus
-                                          evil-iedit-state evil-goggles evil-exchange
-                                          evil-escape evil-ediff evil-easymotion evil-collection
-                                          annalist evil-cleverparens smartparens evil-args
-                                          evil-anzu anzu eval-sexp-fu emr iedit clang-format
-                                          projectile paredit list-utils elisp-slime-nav
-                                          editorconfig dumb-jump s drag-stuff dired-quick-sort
-                                          devdocs define-word column-enforce-mode clean-aindent-mode
-                                          centered-cursor-mode auto-highlight-symbol
-                                          ht dash auto-compile packed aggressive-indent
-                                          ace-window ace-link ace-jump-helm-line helm
-                                          avy popup helm-core which-key use-package
-                                          pcre2el hydra lv hybrid-mode font-lock+ evil
-                                          goto-chg dotenv-mode diminish bind-map bind-key
-                                          async)))
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   ))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol nil)
+  '(org-agenda-files
+     '("/Users/yingxuan/org/labs.org" "/Users/yingxuan/org/gcal.org" "/Users/yingxuan/Dropbox/org/habits.org" "/Users/yingxuan/Dropbox/org/ideas.org" "/Users/yingxuan/Dropbox/org/inbox.org" "/Users/yingxuan/Dropbox/org/leetcode.org" "/Users/yingxuan/Dropbox/org/notes.org" "/Users/yingxuan/Dropbox/org/projects.org" "/Users/yingxuan/Dropbox/org/questions.org" "/Users/yingxuan/Dropbox/org/scrawls.org" "/Users/yingxuan/Dropbox/org/todo.org"))
+  '(package-selected-packages
+     '(org-journal dap-mode bui zonokai-emacs zenburn-theme zen-and-art-theme yasnippet-snippets yapfify xterm-color white-sand-theme wgrep web-mode web-beautify vterm utop underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tuareg caml treemacs-magit toxi-theme toml-mode tide typescript-mode terminal-here tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme stickyfunc-enhance srefactor sphinx-doc spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smex smeargle slim-mode shell-pop seti-theme scss-mode sass-mode ron-mode rjsx-mode reverse-theme reveal-in-osx-finder rebecca-theme railscasts-theme racer rust-mode pytest pyenv-mode pydoc py-isort purple-haze-theme pug-mode proof-general professional-theme prettier-js poetry planet-theme pippel pipenv pyvenv pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme osx-trash osx-dictionary osx-clipboard orgit-forge orgit organic-green-theme org-wild-notifier org-roam-ui websocket org-roam org-rich-yank org-projectile org-category-capture org-present org-pomodoro org-mime org-gcal persist alert log4e gntp org-download org-contrib org-cliplink org omtose-phellack-theme oldlace-theme ocp-indent occidental-theme ocamlformat obsidian-theme npm-mode nose nodejs-repl noctilux-theme naquadah-theme mustang-theme multi-term monokai-theme monochrome-theme molokai-theme moe-theme modus-themes mmm-mode minimal-theme merlin-iedit merlin-eldoc merlin-company material-theme markdown-toc majapahit-theme madhat2r-theme lush-theme lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami lsp-ivy lsp-haskell livid-mode skewer-mode live-py-mode light-soap-theme launchctl kaolin-themes k8s-mode yaml-mode json-reformat json-navigator hierarchy js2-refactor multiple-cursors js2-mode js-doc jbeans-theme jazz-theme ivy-yasnippet ivy-xref ivy-rtags ivy-purpose ivy-hydra ivy-avy ir-black-theme inkpot-theme importmagic epc ctable concurrent impatient-mode simple-httpd ibuffer-projectile htmlize hlint-refactor hindent heroku-theme hemisu-theme hc-zenburn-theme haskell-snippets haml-mode gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-c-style gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link gh-md gendoxy gandalf-theme fuzzy forge yaml magit ghub closql emacsql-sqlite emacsql treepy magit-section git-commit with-editor flyspell-correct-ivy flyspell-correct flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip pos-tip flycheck-ocaml merlin flycheck-haskell flatui-theme flatland-theme farmhouse-theme eziam-theme exotica-theme evil-org espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode dune dracula-theme doom-themes dockerfile-mode docker transient tablist json-mode docker-tramp json-snatcher django-theme disaster deft darktooth-theme darkokai-theme darkmine-theme darkburn-theme dante lcr haskell-mode dakrone-theme cython-mode cyberpunk-theme cpp-auto-include counsel-projectile counsel-css counsel swiper ivy company-ycmd ycmd request-deferred deferred company-web web-completion-data company-rtags rtags company-coq company-math math-symbol-lists company-cabal company-c-headers company-anaconda company color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized cmm-mode clues-theme chocolate-theme autothemer cherry-blossom-theme ccls lsp-mode cargo markdown-mode calfw-org calfw busybee-theme bubbleberry-theme blacken birds-of-paradise-plus-theme badwolf-theme auto-yasnippet yasnippet auto-dictionary attrap apropospriate-theme anti-zenburn-theme anaconda-mode pythonic ample-zen-theme ample-theme alect-themes afternoon-theme ac-ispell auto-complete ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons memoize all-the-icons spaceline powerline restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav editorconfig dumb-jump s drag-stuff dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy popup helm-core which-key use-package pcre2el hydra lv hybrid-mode font-lock+ evil goto-chg dotenv-mode diminish bind-map bind-key async)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)

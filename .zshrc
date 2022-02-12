@@ -140,6 +140,8 @@ export LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-
-
 export PATH="$HOME/.poetry/bin:$PATH"
+
+[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
+alias k=kubectl
+

@@ -46,8 +46,10 @@ This function should only modify configuration layer settings."
       org-start-notification-daemon-on-startup t
       org-enable-roam-support t
       org-enable-org-journal-support t)
-     (shell :variables shell-default-shell'multi-term
-            shell-default-position 'bottom)
+     (shell
+      :variables
+      shell-default-shell 'multi-term
+      shell-default-position 'bottom)
      spell-checking
      syntax-checking
      treemacs
@@ -60,14 +62,18 @@ This function should only modify configuration layer settings."
      rust
      javascript
      json
-     (typescript :variables typescript-fmt-on-save
-                 t typescript-fmt-tool 'prettier)
+     (typescript
+      :variables
+      typescript-fmt-on-save t
+      typescript-fmt-tool 'prettier)
      react
      ocaml
      yaml
      haskell
-     (python :variables python-formatter'black
-             python-format-on-save t))
+     (python
+      :variables
+      python-formatter 'black
+      python-format-on-save t))
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
    ;; loaded using load/require/use-package in the user-config section below in

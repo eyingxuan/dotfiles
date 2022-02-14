@@ -630,11 +630,12 @@ before packages are loaded."
   (with-eval-after-load 'org-journal
     (setq org-journal-dir "~/Dropbox/org/journal/")
     (setq org-journal-date-format "%A, %d %B %Y")
-    (setq org-journal-enable-agenda-integration
-          t))
+    (setq org-journal-file-format "%Y%m%d.org" )
+    )
   ;; Set up org agenda
   (with-eval-after-load 'org-agenda
     (setq org-agenda-window-setup 'current-window)
+    (add-to-list 'org-agenda-files "~/Dropbox/org/journal")
     (add-to-list 'org-agenda-files org-directory)
     (add-to-list 'org-agenda-files "~/org/gcal.org")
     (add-to-list 'org-agenda-files "~/org/labs.org")
@@ -668,6 +669,10 @@ before packages are loaded."
     (advice-add 'org-refile
                 :after (lambda (&rest _)
                          (org-save-all-org-buffers)))
+    (setq org-refile-targets
+      '((nil :maxlevel . 1)
+         (org-agenda-files :maxlevel . 1)))
+    (setq org-refile-use-outline-path 'file)
     (setq ying/org-agenda-todo-view `("c" "Agenda"
                                       ((agenda ""
                                                ((org-agenda-span 'day)
@@ -732,20 +737,18 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(evil-want-Y-yank-to-eol nil)
-   '(org-agenda-files
-     '("/Users/yingxuan/org/labs.org" "/Users/yingxuan/org/gcal.org" "/Users/yingxuan/Dropbox/org/habits.org" "/Users/yingxuan/Dropbox/org/ideas.org" "/Users/yingxuan/Dropbox/org/inbox.org" "/Users/yingxuan/Dropbox/org/leetcode.org" "/Users/yingxuan/Dropbox/org/notes.org" "/Users/yingxuan/Dropbox/org/projects.org" "/Users/yingxuan/Dropbox/org/questions.org" "/Users/yingxuan/Dropbox/org/scrawls.org" "/Users/yingxuan/Dropbox/org/todo.org"))
-   '(package-selected-packages
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol nil)
+  '(package-selected-packages
      '(format-all language-id inheritenv org-journal dap-mode bui zonokai-emacs zenburn-theme zen-and-art-theme yasnippet-snippets yapfify xterm-color white-sand-theme wgrep web-mode web-beautify vterm utop underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tuareg caml treemacs-magit toxi-theme toml-mode tide typescript-mode terminal-here tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme stickyfunc-enhance srefactor sphinx-doc spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smex smeargle slim-mode shell-pop seti-theme scss-mode sass-mode ron-mode rjsx-mode reverse-theme reveal-in-osx-finder rebecca-theme railscasts-theme racer rust-mode pytest pyenv-mode pydoc py-isort purple-haze-theme pug-mode proof-general professional-theme prettier-js poetry planet-theme pippel pipenv pyvenv pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme osx-trash osx-dictionary osx-clipboard orgit-forge orgit organic-green-theme org-wild-notifier org-roam-ui websocket org-roam org-rich-yank org-projectile org-category-capture org-present org-pomodoro org-mime org-gcal persist alert log4e gntp org-download org-contrib org-cliplink org omtose-phellack-theme oldlace-theme ocp-indent occidental-theme ocamlformat obsidian-theme npm-mode nose nodejs-repl noctilux-theme naquadah-theme mustang-theme multi-term monokai-theme monochrome-theme molokai-theme moe-theme modus-themes mmm-mode minimal-theme merlin-iedit merlin-eldoc merlin-company material-theme markdown-toc majapahit-theme madhat2r-theme lush-theme lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami lsp-ivy lsp-haskell livid-mode skewer-mode live-py-mode light-soap-theme launchctl kaolin-themes k8s-mode yaml-mode json-reformat json-navigator hierarchy js2-refactor multiple-cursors js2-mode js-doc jbeans-theme jazz-theme ivy-yasnippet ivy-xref ivy-rtags ivy-purpose ivy-hydra ivy-avy ir-black-theme inkpot-theme importmagic epc ctable concurrent impatient-mode simple-httpd ibuffer-projectile htmlize hlint-refactor hindent heroku-theme hemisu-theme hc-zenburn-theme haskell-snippets haml-mode gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-c-style gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link gh-md gendoxy gandalf-theme fuzzy forge yaml magit ghub closql emacsql-sqlite emacsql treepy magit-section git-commit with-editor flyspell-correct-ivy flyspell-correct flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip pos-tip flycheck-ocaml merlin flycheck-haskell flatui-theme flatland-theme farmhouse-theme eziam-theme exotica-theme evil-org espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode dune dracula-theme doom-themes dockerfile-mode docker transient tablist json-mode docker-tramp json-snatcher django-theme disaster deft darktooth-theme darkokai-theme darkmine-theme darkburn-theme dante lcr haskell-mode dakrone-theme cython-mode cyberpunk-theme cpp-auto-include counsel-projectile counsel-css counsel swiper ivy company-ycmd ycmd request-deferred deferred company-web web-completion-data company-rtags rtags company-coq company-math math-symbol-lists company-cabal company-c-headers company-anaconda company color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized cmm-mode clues-theme chocolate-theme autothemer cherry-blossom-theme ccls lsp-mode cargo markdown-mode calfw-org calfw busybee-theme bubbleberry-theme blacken birds-of-paradise-plus-theme badwolf-theme auto-yasnippet yasnippet auto-dictionary attrap apropospriate-theme anti-zenburn-theme anaconda-mode pythonic ample-zen-theme ample-theme alect-themes afternoon-theme ac-ispell auto-complete ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons memoize all-the-icons spaceline powerline restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav editorconfig dumb-jump s drag-stuff dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy popup helm-core which-key use-package pcre2el hydra lv hybrid-mode font-lock+ evil goto-chg dotenv-mode diminish bind-map bind-key async)))
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   )
-  )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)

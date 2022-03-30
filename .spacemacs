@@ -621,13 +621,17 @@ before packages are loaded."
   ;; Org/Roam/Deft directories set up
   (setq deft-directory "~/Dropbox/org/brain")
   (with-eval-after-load 'org
-    (setq org-directory "~/Dropbox/org/"))
+    (setq epa-pinentry-mode 'loopback)
+    (setq org-crypt-key "engyingxuan@gmail.com")
+    (setq org-directory "~/Dropbox/org/")
+    (setq org-startup-indented 1))
   ;; Set up org roam
   (with-eval-after-load 'org-roam
     (setq org-roam-v2-ack t)
     (setq org-roam-directory "~/Dropbox/org/brain"))
   ;; Set up org journal
   (with-eval-after-load 'org-journal
+    (setq org-journal-enable-encryption t)
     (setq org-journal-dir "~/Dropbox/org/journal/")
     (setq org-journal-date-format "%A, %d %B %Y")
     (setq org-journal-file-format "%Y%m%d.org" )
@@ -646,7 +650,7 @@ before packages are loaded."
                                   ("t" "instant"
                                    entry
                                    (file "~/Dropbox/org/todo.org")
-                                   "* TODO %? %^g")))
+                                   "* TODO %?")))
     (add-to-list 'org-modules 'org-habit t)
     (setq org-habit-graph-column 60)
     (setq org-agenda-start-day nil)

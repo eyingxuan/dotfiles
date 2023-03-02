@@ -9,11 +9,17 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/yingxuan/.oh-my-zsh"
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
+source $ZPLUG_HOME/init.zsh
+
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="dracula"
+zplug "dracula/zsh", as:theme
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -72,10 +78,7 @@ HIST_STAMPS="mm/dd/yyyy"
 export NVM_LAZY_LOAD="true"
 
 plugins=(
-  zsh-syntax-highlighting
-  zsh-nvm
   git
-  zsh-autosuggestions
   fasd
 )
 
@@ -125,29 +128,10 @@ if type bat > /dev/null; then
 fi
 
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-
-# opam configuration
-test -r /Users/yingxuan/.opam/opam-init/init.zsh && . /Users/yingxuan/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
-
-export PATH="$HOME/.local/bin:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
 export LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH="$HOME/.poetry/bin:$PATH"
-
-[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
-alias k=kubectl
+zplug load
 
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/yingxuan/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yingxuan/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/yingxuan/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yingxuan/Downloads/google-cloud-sdk/completion.zsh.inc'; fi

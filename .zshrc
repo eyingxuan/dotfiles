@@ -77,6 +77,7 @@ HIST_STAMPS="mm/dd/yyyy"
 # NVM lazy loading
 export NVM_LAZY_LOAD="true"
 
+
 plugins=(
   git
   fasd
@@ -130,8 +131,15 @@ fi
 
 export LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib"
 
+
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 zplug load
 
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
+# opam configuration
+[[ ! -r /Users/yingxuan/.opam/opam-init/init.zsh ]] || source /Users/yingxuan/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
